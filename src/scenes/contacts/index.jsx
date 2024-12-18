@@ -4,50 +4,60 @@ import { tokens } from "../../theme";
 import { mockDataContacts } from "../../data/mockData";
 import Header from "../../components/Header";
 import { useTheme } from "@mui/material";
+import { useEffect, useState } from "react";
+import { getAllPosts } from "../../services/post.service";
 
 const Contacts = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+  const [posts, setPosts] = useState([]);
+  useEffect(() => {
+    getAllPosts().then((res) => {
+      setPosts(res);
+    });
+  }, []);
 
   const columns = [
     { field: "id", headerName: "ID", flex: 0.5 },
-    { field: "registrarId", headerName: "Registrar ID" },
+    // { field: "registrarId", headerName: "Registrar ID" },
     {
-      field: "name",
-      headerName: "Name",
+      field: "title",
+      headerName: "Tên phòng trọ",
       flex: 1,
       cellClassName: "name-column--cell",
     },
     {
-      field: "age",
-      headerName: "Age",
-      type: "number",
+      field: "user",  // Truy cập đối tượng `user`
+      headerName: "Tên chủ trọ",
       headerAlign: "left",
       align: "left",
+      valueGetter: (params) => params.row.user?.fullName || "",  // Lấy giá trị từ `username`
+      type: "string",  // Thay vì "number", vì đây là chuỗi
     },
     {
       field: "phone",
-      headerName: "Phone Number",
+      headerName: "Số điện thoại",
+      valueGetter: (params) => params.row.user?.phone || "",  // Lấy giá trị từ `username`
       flex: 1,
     },
-    {
-      field: "email",
-      headerName: "Email",
-      flex: 1,
-    },
+    // {
+    //   field: "email",
+    //   headerName: "Email",
+    //   flex: 1,
+    // },
     {
       field: "address",
-      headerName: "Address",
+      headerName: "Địa chỉ",
       flex: 1,
     },
     {
       field: "city",
-      headerName: "City",
+      headerName: "Khu vực",
       flex: 1,
     },
     {
-      field: "zipCode",
-      headerName: "Zip Code",
+      field: "price",
+      headerName: "Giá phòng",
       flex: 1,
     },
   ];
@@ -55,8 +65,8 @@ const Contacts = () => {
   return (
     <Box m="20px">
       <Header
-        title="CONTACTS"
-        subtitle="List of Contacts for Future Reference"
+        title="Phòng trọ"
+        subtitle=""
       />
       <Box
         m="40px 0 0 0"
@@ -91,7 +101,7 @@ const Contacts = () => {
         }}
       >
         <DataGrid
-          rows={mockDataContacts}
+          rows={posts}
           columns={columns}
           components={{ Toolbar: GridToolbar }}
         />

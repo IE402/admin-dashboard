@@ -6,28 +6,31 @@ import AdminPanelSettingsOutlinedIcon from "@mui/icons-material/AdminPanelSettin
 import LockOpenOutlinedIcon from "@mui/icons-material/LockOpenOutlined";
 import SecurityOutlinedIcon from "@mui/icons-material/SecurityOutlined";
 import Header from "../../components/Header";
+import { useEffect, useState } from "react";
+import { getAllUsers } from "../../services/user.service";
 
 const Team = () => {
+  const [users, setUsers] = useState([]);
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const columns = [
     { field: "id", headerName: "ID" },
     {
-      field: "name",
-      headerName: "Name",
+      field: "fullName",  
+      headerName: "Họ và Tên",
       flex: 1,
       cellClassName: "name-column--cell",
     },
     {
-      field: "age",
-      headerName: "Age",
+      field: "username",
+      headerName: "Tài khoản",
       type: "number",
       headerAlign: "left",
       align: "left",
     },
     {
       field: "phone",
-      headerName: "Phone Number",
+      headerName: "Số điện thoại",
       flex: 1,
     },
     {
@@ -36,10 +39,10 @@ const Team = () => {
       flex: 1,
     },
     {
-      field: "accessLevel",
-      headerName: "Access Level",
+      field: "role",
+      headerName: "Phân loại",
       flex: 1,
-      renderCell: ({ row: { access } }) => {
+      renderCell: ({ row: { role } }) => {
         return (
           <Box
             width="60%"
@@ -48,29 +51,35 @@ const Team = () => {
             display="flex"
             justifyContent="center"
             backgroundColor={
-              access === "admin"
+              role === "admin"
                 ? colors.greenAccent[600]
-                : access === "manager"
+                : role === "user"
                 ? colors.greenAccent[700]
                 : colors.greenAccent[700]
             }
             borderRadius="4px"
           >
-            {access === "admin" && <AdminPanelSettingsOutlinedIcon />}
-            {access === "manager" && <SecurityOutlinedIcon />}
-            {access === "user" && <LockOpenOutlinedIcon />}
+            {role === "admin" && <AdminPanelSettingsOutlinedIcon />}
+            {/* {role === "manager" && <SecurityOutlinedIcon />} */}
+            {role === "user" && <LockOpenOutlinedIcon />}
             <Typography color={colors.grey[100]} sx={{ ml: "5px" }}>
-              {access}
+              {role}
             </Typography>
           </Box>
         );
       },
     },
   ];
+  useEffect(() => {
+    getAllUsers().then((res) => {
+      setUsers(res);
+      console.log(users);
+    });
+  }, []);
 
   return (
     <Box m="20px">
-      <Header title="TEAM" subtitle="Managing the Team Members" />
+      <Header title="Quản lý người dùng" subtitle="" />
       <Box
         m="40px 0 0 0"
         height="75vh"
@@ -100,7 +109,7 @@ const Team = () => {
           },
         }}
       >
-        <DataGrid checkboxSelection rows={mockDataTeam} columns={columns} />
+        <DataGrid checkboxSelection rows={users} columns={columns} />
       </Box>
     </Box>
   );
