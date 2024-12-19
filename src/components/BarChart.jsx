@@ -2,16 +2,31 @@ import { useTheme } from "@mui/material";
 import { ResponsiveBar } from "@nivo/bar";
 import { tokens } from "../theme";
 import { mockBarData as data } from "../data/mockData";
+import { useEffect, useState } from "react";
+import { countByCity } from "../services/post.service";
 
 const BarChart = ({ isDashboard = false }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+  const [posts, setPosts] = useState([]);
+  
+  useEffect(() => {
+    countByCity().then((res) => {
+      setPosts(res);
+      console.log(res);
+    });
+  }, []);
+
+  // Calculate the min and max postCount values to determine tick values
+  const postCounts = posts.map(post => post.postCount);
+  const minCount = Math.min(...postCounts);
+  const maxCount = Math.max(...postCounts);
+  const tickValues = Array.from({ length: maxCount - minCount + 1 }, (_, i) => i + minCount);
 
   return (
     <ResponsiveBar
-      data={data}
+      data={posts}
       theme={{
-        // added
         axis: {
           domain: {
             line: {
@@ -39,8 +54,8 @@ const BarChart = ({ isDashboard = false }) => {
           },
         },
       }}
-      keys={["hot dog", "burger", "sandwich", "kebab", "fries", "donut"]}
-      indexBy="country"
+      keys={["postCount"]}
+      indexBy="city"
       margin={{ top: 50, right: 130, bottom: 50, left: 60 }}
       padding={0.3}
       valueScale={{ type: "linear" }}
@@ -76,7 +91,7 @@ const BarChart = ({ isDashboard = false }) => {
         tickSize: 5,
         tickPadding: 5,
         tickRotation: 0,
-        legend: isDashboard ? undefined : "country", // changed
+        legend: isDashboard ? undefined : "city", // changed
         legendPosition: "middle",
         legendOffset: 32,
       }}
@@ -84,9 +99,10 @@ const BarChart = ({ isDashboard = false }) => {
         tickSize: 5,
         tickPadding: 5,
         tickRotation: 0,
-        legend: isDashboard ? undefined : "food", // changed
+        legend: isDashboard ? undefined : "Số Lượng Trọ", // changed
         legendPosition: "middle",
         legendOffset: -40,
+        tickValues: tickValues,  // Dynamically calculated tick values
       }}
       enableLabel={false}
       labelSkipWidth={12}
@@ -121,7 +137,7 @@ const BarChart = ({ isDashboard = false }) => {
       ]}
       role="application"
       barAriaLabel={function (e) {
-        return e.id + ": " + e.formattedValue + " in country: " + e.indexValue;
+        return e.id + ": " + e.formattedValue + " in city: " + e.indexValue;
       }}
     />
   );

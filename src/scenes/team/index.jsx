@@ -63,7 +63,7 @@ const Team = () => {
             {/* {role === "manager" && <SecurityOutlinedIcon />} */}
             {role === "user" && <LockOpenOutlinedIcon />}
             <Typography color={colors.grey[100]} sx={{ ml: "5px" }}>
-              {role}
+              {role ==="user"? "Người dùng" : "Chủ trọ"}
             </Typography>
           </Box>
         );

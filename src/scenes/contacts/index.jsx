@@ -18,7 +18,12 @@ const Contacts = () => {
   }, []);
 
   const columns = [
-    { field: "id", headerName: "ID", flex: 0.5 },
+    { field: "id", headerName: "ID", flex: 1,
+      headerAlign: "center",
+      align: "center",
+      // set chiều rộng của cột
+
+     },
     // { field: "registrarId", headerName: "Registrar ID" },
     {
       field: "title",
@@ -35,10 +40,14 @@ const Contacts = () => {
       type: "string",  // Thay vì "number", vì đây là chuỗi
     },
     {
-      field: "phone",
-      headerName: "Số điện thoại",
-      valueGetter: (params) => params.row.user?.phone || "",  // Lấy giá trị từ `username`
-      flex: 1,
+      field: "roomSpace",
+      headerName: "Số phòng trống",
+      //css cho heaferName thành center
+      headerAlign: "center",
+
+      align: "center",
+      // valueGetter: (params) => params.row.user?.phone || "",  // Lấy giá trị từ `username`
+      flex: 0.5,
     },
     // {
     //   field: "email",
@@ -48,17 +57,17 @@ const Contacts = () => {
     {
       field: "address",
       headerName: "Địa chỉ",
-      flex: 1,
+      flex: 2,
     },
     {
       field: "city",
       headerName: "Khu vực",
-      flex: 1,
+      flex: 0.7,
     },
     {
       field: "price",
       headerName: "Giá phòng",
-      flex: 1,
+      flex: 0.5,
     },
   ];
 

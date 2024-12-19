@@ -10,3 +10,11 @@ export const getAllPosts = async () => {
     console.error(error);
   }
 };
+export const countByCity = async () => {
+  try {
+    const response = await apiRequest.get("/posts/city/count");
+    return response.data;
+  } catch (error) {
+    console.error(error);
+  }
+}
