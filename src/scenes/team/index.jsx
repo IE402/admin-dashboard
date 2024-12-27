@@ -7,8 +7,7 @@ import LockOpenOutlinedIcon from "@mui/icons-material/LockOpenOutlined";
 import SecurityOutlinedIcon from "@mui/icons-material/SecurityOutlined";
 import Header from "../../components/Header";
 import { useEffect, useState } from "react";
-import { getAllUsers } from "../../services/user.service";
-
+import { userService } from "../../services/user.service";
 const Team = () => {
   const [users, setUsers] = useState([]);
   const theme = useTheme();
@@ -71,7 +70,7 @@ const Team = () => {
     },
   ];
   useEffect(() => {
-    getAllUsers().then((res) => {
+    userService.getAllUsers().then((res) => {
       setUsers(res);
       console.log(users);
     });
